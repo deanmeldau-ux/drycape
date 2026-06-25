@@ -1,4 +1,4 @@
-/* DryCape — Cape Town damp & waterproofing lead matching
+/* DryCape, Cape Town damp & waterproofing lead matching
    Mobile-first, no framework, fast. One stylesheet for the whole site. */
 
 :root{
@@ -136,7 +136,7 @@ section{padding:50px 0}
 .faq summary{cursor:pointer;font-weight:700;padding:15px 18px;list-style:none;color:var(--navy)}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";float:right;color:var(--teal);font-weight:800}
-.faq details[open] summary::after{content:"–"}
+.faq details[open] summary::after{content:", "}
 .faq details[open] summary{border-bottom:1px solid var(--line)}
 .faq .ans{padding:14px 18px}
 .faq .ans p:last-child{margin-bottom:0}
