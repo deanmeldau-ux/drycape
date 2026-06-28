@@ -20,7 +20,7 @@
  */
 
 // Set this to a real endpoint to go live. While null, submissions are captured locally only.
-var FORM_ENDPOINT = "https://introductory-jeffrey-daily-stockings.trycloudflare.com/lead"; // auto-synced to live tunnel
+var FORM_ENDPOINT = "https://shanghai-apt-browsers-some.trycloudflare.com/lead"; // auto-synced to live tunnel
 
 (function () {
   var form = document.getElementById('quote-form');
