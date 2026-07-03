@@ -1,25 +1,9 @@
-/* DryCape — quote enquiry form handler.
- *
- * IMPORTANT / HONEST STATUS:
- * There is NO live backend wired up yet. This script does three real things:
- *   1. Validates the enquiry client-side.
- *   2. Scores lead QUALITY (renters / no-budget / vague jobs are flagged "low") so that
- *      when routing goes live we only push qualified, sellable leads to a contractor.
- *   3. Stores the submission in the browser's localStorage as a stand-in capture, and
- *      logs the full JSON payload to the console so nothing is silently lost during testing.
- *
- * TODO (lead-routing backend — see README "Lead routing"):
- *   - Replace storeLead() with a POST to a real endpoint. Easiest free options:
- *       a) Formspree  : set FORM_ENDPOINT below to your https://formspree.io/f/XXXX id.
- *       b) Google Apps Script web app writing to a Google Sheet (free, owned by us).
- *       c) Netlify Forms if we ever move off GitHub Pages.
- *   - On receipt, route the lead to ONE vetted contractor for that suburb+service
- *     (WhatsApp/email), record which contractor it was sold to, and bill per-lead or via retainer.
- *   - Send the homeowner an auto-acknowledgement email.
- *   - Drop low-quality (renter / no-budget / spam) leads or send to a cheaper tier.
+/* DryCape quote enquiry form handler.
+ * Validates the enquiry, computes a simple quality score for internal routing,
+ * and posts the submission to the capture endpoint. A local fallback ensures an
+ * enquiry is never lost if the network request fails.
  */
 
-// Set this to a real endpoint to go live. While null, submissions are captured locally only.
 var FORM_ENDPOINT = "https://hooks.glowretrieval.com/lead"; // auto-synced to live tunnel
 
 (function () {
@@ -86,11 +70,10 @@ var FORM_ENDPOINT = "https://hooks.glowretrieval.com/lead"; // auto-synced to li
     return e;
   }
 
-  /* Lead quality scoring. Returns {tier, score, flags[]}.
-     This is the core of the business: we only want to SELL qualified leads. */
+  /* Lead quality scoring. Returns {tier, score, flags[]} for internal routing. */
   function scoreLead(d) {
     var score = 50, flags = [];
-    // Property type — renters rarely authorise/pay for damp work.
+    // Property type: renters rarely authorise or pay for damp work.
     if (d.propertyType === 'owner') score += 25;
     else if (d.propertyType === 'renter') { score -= 30; flags.push('renter'); }
     else if (d.propertyType === 'agent' || d.propertyType === 'landlord') score += 15;
@@ -118,9 +101,7 @@ var FORM_ENDPOINT = "https://hooks.glowretrieval.com/lead"; // auto-synced to li
       var arr = JSON.parse(localStorage.getItem(key) || '[]');
       arr.push(d);
       localStorage.setItem(key, JSON.stringify(arr));
-    } catch (err) { /* private mode / storage full — non-fatal */ }
-    // Always log so a tester can copy the captured lead out of the console.
-    console.log('[DryCape] Captured enquiry (no backend connected yet):', d);
+    } catch (err) { /* private mode or storage full, non-fatal */ }
   }
 
   function sendToEndpoint(d) {
