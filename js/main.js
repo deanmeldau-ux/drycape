@@ -1,4 +1,4 @@
-/* DryCape — Google Analytics 4 (gtag). Loaded site-wide via main.js. */
+/* DryCape Google Analytics 4 (gtag). Loaded site-wide via main.js. */
 (function () {
   var GA_ID = 'G-6S0N6V318Y';
   var s = document.createElement('script');
@@ -12,7 +12,7 @@
   gtag('config', GA_ID);
 })();
 
-/* DryCape — site interactions (mobile nav). Tiny, no dependencies. */
+/* DryCape site interactions (mobile nav). Tiny, no dependencies. */
 (function () {
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.nav');

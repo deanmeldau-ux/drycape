@@ -126,7 +126,7 @@ section{padding:50px 0}
 .prose ul,.prose ol{margin:0 0 1.2em;padding-left:1.3em}
 .prose li{margin-bottom:.45em}
 .callout{background:var(--bg-soft);border-left:4px solid var(--teal);padding:16px 20px;border-radius:0 8px 8px 0;margin:1.4em 0}
-.price-table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:.96rem}
+.price-table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:.96rem;display:block;overflow-x:auto}
 .price-table th,.price-table td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
 .price-table th{background:var(--navy);color:#fff}
 .price-table tr:nth-child(even) td{background:var(--bg-soft)}
