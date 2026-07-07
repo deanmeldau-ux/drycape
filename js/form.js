@@ -120,6 +120,10 @@ var FORM_ENDPOINT = "https://hooks.glowretrieval.com/lead"; // auto-synced to li
   }
 
   function finish(d) {
+    // Fire the conversion (GA4 lead now, Google Ads once its id/label are set).
+    // This is the single success point, reached on both a good POST and the
+    // local fallback, so every completed enquiry counts exactly once.
+    if (window.dcTrackLead) { window.dcTrackLead(d); }
     form.style.display = 'none';
     if (okBox) {
       okBox.style.display = 'block';

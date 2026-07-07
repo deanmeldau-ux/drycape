@@ -1,6 +1,13 @@
 /* DryCape Google Analytics 4 (gtag). Loaded site-wide via main.js. */
 (function () {
   var GA_ID = 'G-6S0N6V318Y';
+  /* Google Ads conversion account + label. Paste the real values from
+     Google Ads (Goals, Conversions, Create action, Website) once the lead
+     conversion action is made. Format: AW-XXXXXXXXX and its label string.
+     Until both are filled in (no 'X' left), the Ads conversion stays dormant;
+     the GA4 generate_lead event below always fires because GA4 is already live. */
+  var AW_ID = 'AW-18303988120';
+  var AW_LABEL = 'EMGhCPjxm8wcEJjjgphE';
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
@@ -10,6 +17,29 @@
   window.gtag = gtag;
   gtag('js', new Date());
   gtag('config', GA_ID);
+  var awLive = AW_ID.indexOf('X') === -1 && AW_LABEL.indexOf('X') === -1;
+  if (awLive) { gtag('config', AW_ID); }
+
+  /* Single choke point the quote form calls on a successful enquiry.
+     Fires the GA4 lead event now, and the Google Ads conversion once AW_ID
+     + AW_LABEL are real. value 250 = the R250 an exclusive lead sells for. */
+  window.dcTrackLead = function (lead) {
+    try {
+      gtag('event', 'generate_lead', {
+        currency: 'ZAR',
+        value: 250,
+        service: (lead && lead.service) || '',
+        suburb: (lead && lead.suburb) || ''
+      });
+      if (awLive) {
+        gtag('event', 'conversion', {
+          send_to: AW_ID + '/' + AW_LABEL,
+          value: 250,
+          currency: 'ZAR'
+        });
+      }
+    } catch (e) { /* never let tracking break the form */ }
+  };
 })();
 
 /* DryCape site interactions (mobile nav). Tiny, no dependencies. */
